@@ -29,6 +29,7 @@ async function run(){
         const database = client.db('weddingring');
         const productCollections = database.collection('products');
         const orderCollection = database.collection('orders');
+        const reviewCollections = database.collection('reviews');
 
 
          // GET Products API
@@ -58,7 +59,9 @@ app.get('/products/:id', async(req, res)=>{
 
 // GET ORDERS API
 app.get('/orders', async(req, res)=>{
-    const cursor = orderCollection.find({});
+    const email = req.query.email;
+    const query = {email: email}
+    const cursor = orderCollection.find(query);
     const orders = await cursor.toArray();
     res.send(orders);
 })
@@ -68,7 +71,25 @@ app.get('/orders', async(req, res)=>{
         const order = req.body;
         const result = await orderCollection.insertOne(order);
         res.json(result);
-    })
+    });
+
+
+     // GET Products API
+app.get('/reviews', async(req, res)=>{
+    const cursor = reviewCollections.find({});
+    const reviews = await cursor.toArray();
+    res.send(reviews);
+})
+
+// POST API
+app.post('/reviews', async(req, res)=>{
+    const review = req.body;
+    console.log('hit the post api', review)
+    const result = await reviewCollections.insertOne(review);
+    console.log(result);
+    res.json(result);
+});
+
        
     }
     finally{

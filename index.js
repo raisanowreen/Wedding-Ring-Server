@@ -30,6 +30,7 @@ async function run(){
         const productCollections = database.collection('products');
         const orderCollection = database.collection('orders');
         const reviewCollections = database.collection('reviews');
+        const userCollections = database.collection('users');
 
 
          // GET Products API
@@ -90,7 +91,40 @@ app.post('/reviews', async(req, res)=>{
     res.json(result);
 });
 
-       
+app.get('/users/:email', async(req, res)=>{
+    const email = req.params.email;
+    const query = {email: email};
+    const user = await userCollections.findOne(query);
+    let isAdmin = false;
+    if(user?.role === 'admin'){
+        isAdmin= true;
+    }
+    res.json({admin: isAdmin});
+})
+
+
+
+  app.post('/users', async(req, res)=>{
+      const user = req.body;
+    //   const filter = {email: user.email};
+    //   const options = {upsert: true};
+    //   const updateDoc = {$set = user};
+const result = await userCollections.insertOne(user);
+// const result = await userCollections.updateOne(filter,updateDoc, options);
+res.json(result);
+  });
+  
+  app.put('/users/admin', async(req, res) =>{
+      const user = req.body;
+      console.log(user)
+      const filter = {email: user.email};
+      const updateDoc = {$set: {role: 'admin'}}
+      const result = await userCollections.updateOne(filter, updateDoc);
+      res.json(result);
+  })
+
+
+
     }
     finally{
 

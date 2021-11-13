@@ -33,14 +33,14 @@ async function run(){
         const userCollections = database.collection('users');
 
 
-         // GET Products API
+         // GET PRODUCTS API
 app.get('/products', async(req, res)=>{
     const cursor = productCollections.find({});
     const products = await cursor.toArray();
     res.send(products);
 })
 
-// POST API
+// POST  PRODUCTS API
 app.post('/products', async(req, res)=>{
     const product = req.body;
     console.log('hit the post api', product)
@@ -49,7 +49,7 @@ app.post('/products', async(req, res)=>{
     res.json(result);
 });
 
-// DELETE MY ORDER API
+// DELETE PRODUCTS API
 app.delete('/products/:id', async(req, res)=>{
     const id = req.params.id;
     console.log(id);
@@ -57,7 +57,6 @@ app.delete('/products/:id', async(req, res)=>{
     const result = await productCollections.deleteOne(query);
     res.json(result);
 })
-
 
 // GET SINGLE Product
 app.get('/products/:id', async(req, res)=>{
@@ -76,22 +75,40 @@ app.get('/orders', async(req, res)=>{
     res.send(orders);
 })
 
-  // ADD ORDERS API
-    app.post('/orders', async(req, res)=>{
-        const order = req.body;
-        const result = await orderCollection.insertOne(order);
-        res.json(result);
-    });
+ // ADD ORDERS API
+ app.post('/orders', async(req, res)=>{
+    const order = req.body;
+    const result = await orderCollection.insertOne(order);
+    res.json(result);
+});
 
 
-     // GET Products API
+// GET ALL ORDERS API
+app.get('/allOrders', async(req, res)=>{
+    const cursor = orderCollection.find({});
+    const orders = await cursor.toArray();
+    res.send(orders);
+})
+
+// DELETE ALL ORDERS API
+app.delete('/allOrders/:id', async(req, res)=>{
+    const id = req.params.id;
+    console.log(id);
+    const query = {_id: ObjectId(id)};
+    const result = await orderCollection.deleteOne(query);
+    res.json(result);
+})
+
+
+
+     // GET REVIEWS API
 app.get('/reviews', async(req, res)=>{
     const cursor = reviewCollections.find({});
     const reviews = await cursor.toArray();
     res.send(reviews);
 })
 
-// POST API
+// POST REVIEWS API
 app.post('/reviews', async(req, res)=>{
     const review = req.body;
     console.log('hit the post api', review)
@@ -100,6 +117,8 @@ app.post('/reviews', async(req, res)=>{
     res.json(result);
 });
 
+
+// GET MY ORDERS API
 app.get('/users/:email', async(req, res)=>{
     const email = req.params.email;
     const query = {email: email};
@@ -112,7 +131,7 @@ app.get('/users/:email', async(req, res)=>{
 })
 
 
-
+// POST ALL USERS API
   app.post('/users', async(req, res)=>{
       const user = req.body;
     //   const filter = {email: user.email};
@@ -123,6 +142,7 @@ const result = await userCollections.insertOne(user);
 res.json(result);
   });
   
+//   UPDATE USERS ROLE API
   app.put('/users/admin', async(req, res) =>{
       const user = req.body;
       console.log(user)

@@ -49,6 +49,15 @@ app.post('/products', async(req, res)=>{
     res.json(result);
 });
 
+// DELETE MY ORDER API
+app.delete('/products/:id', async(req, res)=>{
+    const id = req.params.id;
+    console.log(id);
+    const query = {_id: ObjectId(id)};
+    const result = await productCollections.deleteOne(query);
+    res.json(result);
+})
+
 
 // GET SINGLE Product
 app.get('/products/:id', async(req, res)=>{
@@ -122,7 +131,6 @@ res.json(result);
       const result = await userCollections.updateOne(filter, updateDoc);
       res.json(result);
   })
-
 
 
     }

@@ -99,7 +99,17 @@ app.delete('/allOrders/:id', async(req, res)=>{
     res.json(result);
 })
 
-
+app.put('/allOrders/:id', (req, res) =>{
+    const id = req.params.id;
+    const updatedStatus = req.body.status;
+    const filter = {_id: ObjectId(id)};
+    orderCollection.updateOne(filter, {
+        $set: {status: updatedStatus}
+    })
+    .then(result=>{
+res.send(result)
+    });
+})
 
      // GET REVIEWS API
 app.get('/reviews', async(req, res)=>{
